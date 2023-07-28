@@ -1,0 +1,167 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    
+}
+.box{
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #003049;
+    color: aliceblue;
+    border: 2px solid black;
+
+}
+.enter{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+
+} 
+.numGreetings{
+    padding-left: 3px;
+}
+.heading{
+    border: 1px solid black;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: flex-end;
+    background-color: blueviolet;
+    font-weight: 1000px;
+    box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.75)
+}
+.center {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+.name-input{
+    display: block;
+    place-items: center;
+}
+.name-area{
+    padding: 9px;
+}
+.langs{
+    margin-top: 20px;
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.block{
+    display: flex;
+    flex-direction: column;
+} 
+.buttons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.greetNameButton{
+    margin-top: 5px;
+    padding: 9px;
+    background-color: springgreen;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    min-width:85px;
+}
+.resetNameButton{
+    margin-top: 5px;
+    padding: 9px;
+    background-color: springgreen;
+    border-radius: 6px;
+    align-items: center;
+    min-width:85px;
+}
+.greeting{
+    margin-top: 20px;
+}
+.warning{
+    color: #d62828;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    font-size: small;
+}
+.info{
+    color: green;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    font-size: small;
+}
+.greetNameButton:hover, .resetNameButton:hover{
+    background-color:rgb(0, 65, 32) ;
+}
+@media (min-width: 760px){
+   
+    .heading{
+       display: flex;
+       width: 350px;
+    
+    }
+    .enter{
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+
+    } 
+    .langs{
+        margin-top: 50px;
+        display: flex;
+        gap: 50px;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        width: 500px;
+    }
+    #Name {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 25px;
+    }
+    #NameGreetingCount, .numGreetings{
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 25px;
+    }
+    .name-area{
+        width:50%;
+    }
+    .buttons{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 50px;
+    }
+    .label-body{
+        font-size: 25px;
+    }
+    .outputGreeting, .outputName{
+        font-size: 25px;
+    }
+    .warning{
+        color: #d62828;
+        margin-bottom: 15px;
+        margin-top: 15px;
+        font-size: medium;
+    }
+    .info{
+        color: green;
+        margin-bottom: 15px;
+        margin-top: 15px;
+        font-size: medium;
+}
+}

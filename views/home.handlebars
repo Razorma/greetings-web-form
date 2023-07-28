@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- ... -->
+  <body>
+    <div class="box">
+      <div class="heading">
+        <h1>Greeting</h1>
+      </div>
+      <div class="name-input">
+        <p class="message warning center"></p>
+        <form action="/greetings" method="POST">
+        <div class="enter">
+          <label for="name-area" id="Name">Name</label>
+          
+            <input
+              type="text"
+              name="name"
+              value=""
+              placeholder="enter your name "
+              class="name-area"
+            />
+            <span id="NameGreetingCount">Greetings</span
+            ><span class="numGreetings">{{counter}}</span>
+        </div>
+        <p class="message2 warning center"></p>
+        <div class="langs">
+          <label class="block">
+            <input
+              type="radio"
+              name="language"
+              class="language"
+              value="Hello"
+            />
+            <span class="label-body">English</span>
+          </label>
+          <label class="block">
+            <input
+              type="radio"
+              name="language"
+              class="language"
+              value="Sawbona"
+            />
+            <span class="label-body">isiZulu</span>
+          </label>
+          <label class="block">
+            <input
+              type="radio"
+              name="language"
+              class="language"
+              value="Molo"
+            />
+            <span class="label-body">isiXhosa</span>
+          </label>
+        </div>
+        <div class="buttons">
+          <button class="greetNameButton" type="submit" name="button">
+            Greet me
+          </button>
+          <button class="resetNameButton" type="button" name="button">
+            Reset
+          </button>
+        </div>
+        </form>
+      </div>
+      <p class="resetMessage info center"></p>
+      <div class="greeting">
+        <span class="outputGreeting">{{language}}</span>
+        <span class="outputName">{{name}}</span>
+      </div>
+    </div>
+  </body>
+</html>
