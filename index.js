@@ -31,8 +31,16 @@ app.get('/', function (req, res) {
 });
   
 app.post("/greetings", function (req, res) {
+  if(req.body.name===""||req.body.language===undefined){
+    res.redirect("/")
+    greeting.getName("")
+    greeting.setLanguageGreeting("")
+      return
+  }else{
     greeting.getName(req.body.name)
     greeting.setLanguageGreeting(req.body.language)
+
+  } 
     res.redirect("/")
 });
 

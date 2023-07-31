@@ -37,7 +37,7 @@ export default function greeting(){
         return namesGreeted
     }
     function setLanguageGreeting(lang){
-        if(lang===undefined){
+        if(lang===undefined||lang===""){
             theLanguage=""
             name=""
             langMessage = "please enter language"
