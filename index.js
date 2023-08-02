@@ -31,14 +31,16 @@ app.get('/', function (req, res) {
 });
   
 app.post("/greetings", function (req, res) {
+  const letterRegex = /^[a-zA-Z ]*$/
   if(req.body.name===""||req.body.language===undefined){
-    res.redirect("/")
+    
     greeting.getName("")
     greeting.setLanguageGreeting("")
-      return
-  }else{
+    greeting.greetName()
+  }else  if(letterRegex.test(req.body.name)){
     greeting.getName(req.body.name)
     greeting.setLanguageGreeting(req.body.language)
+
 
   } 
     res.redirect("/")

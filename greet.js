@@ -18,6 +18,7 @@ export default function greeting(){
                 namesGreeted[passedName.toLowerCase()] = passedName.toLowerCase();
             }
         }else{
+            name = ""
             nameMessage = "please enter Name"
             theLanguage=""
             setTimeout(function () {
