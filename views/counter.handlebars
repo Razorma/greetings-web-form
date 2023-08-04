@@ -1,0 +1,10 @@
+<div class="container">
+    <div class="listOfNames">
+        <ul class="listBox">
+            <li class="listBoxHeader">Greeted Names</li>
+            {{#each names}}
+            <li>Hello, {{this.username}} has been greeted {{this.greeted_count}} times.</li>
+            {{/each}}
+        </ul>
+    </div>
+</div>
