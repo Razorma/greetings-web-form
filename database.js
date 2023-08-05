@@ -13,9 +13,10 @@ const db = pgp({ connectionString, ssl });
 const pool = new pg.Pool({
   connectionString: connectionString,
   ssl: {
-    rejectUnauthorized: false // Ignore SSL certificate validation for now 
+    rejectUnauthorized: false 
   }
 });
+
 
 async function createUsersTable() {
   try {
@@ -28,6 +29,7 @@ async function createUsersTable() {
   `;
     await db.none(createTableQuery);
     console.log('Table "users" created successfully.');
+
 
     const checkConstraintQuery = `
       SELECT constraint_name
@@ -60,9 +62,7 @@ async function addUser(username) {
       SET greeted_count = users.greeted_count + 1
       RETURNING id;
     `;
-    const client = await pool.connect();
     const result = await db.oneOrNone(insertQuery, [username]);
-    client.release();
     if (result) {
       console.log(`User "${username}" greeted. Greeted count: ${result.greeted_count}`);
     } else {
@@ -75,14 +75,15 @@ async function addUser(username) {
 
 
 
+
 async function getUsers() {
     try {
       const selectQuery = `
         SELECT * FROM users;
       `;
       const users = await db.any(selectQuery);
-      console.log('All users:');
-      console.log(users);
+      // console.log('All users:');
+      // console.log(users);
       return users
     } catch (error) {
       console.error('Error getting users:', error.message);
@@ -95,7 +96,7 @@ async function getUsers() {
       `;
       const countResult = await db.one(selectQuery);
       const totalCount = countResult.count;
-      console.log(`Total users greeted: ${totalCount}`);
+      // console.log(`Total users greeted: ${totalCount}`);
       return totalCount
     } catch (error) {
       console.error('Error getting greeted users count:', error.message);
@@ -108,7 +109,13 @@ async function getUsers() {
         DELETE FROM users;
       `;
       await db.none(deleteQuery);
-      console.log('All users removed successfully.');
+      // console.log('All users removed successfully.');
+  
+      const resetSequenceQuery = `
+        ALTER SEQUENCE users_id_seq RESTART WITH 1;
+      `;
+      await db.none(resetSequenceQuery);
+      // console.log('User ID sequence reset.');
     } catch (error) {
       console.error('Error removing users:', error.message);
     }
@@ -120,7 +127,7 @@ export {
   addUser,
   getGreetedUsersCount,
   removeAllUsers,
-  pool 
+  pool
 };
 
 export { db };

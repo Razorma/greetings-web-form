@@ -6,8 +6,14 @@
       <div class="heading">
         <h1>Greeting</h1>
       </div>
+      <p class="message warning center"></p>
       <div class="name-input">
-        <p class="message warning center"></p>
+        {{#if errorMessage}}
+        <p class="message warning center">{{errorMessage}}</p>
+        {{/if}}
+        {{#if infoMessage}}
+        <p class="message info center">{{infoMessage}}</p>
+        {{/if}}
         <form action="/greetings" method="POST">
           <div class="enter">
             <label for="name-area" id="Name">Name</label>
@@ -34,10 +40,12 @@
             <button class="greetNameButton" type="submit" name="button">
               Greet me
             </button>
-            {{!-- <button class="resetNameButton" type="button" name="button">
-              Reset
-            </button> --}}
           </div>
+        </form>
+        <form action="/reset" method="POST">
+          <button class="resetNameButton" type="submit" name="button">
+            Reset Names
+          </button>
         </form>
           <a href="/greeted">
             <button class="greetNameButton" type="submit" name="button" id="getName">

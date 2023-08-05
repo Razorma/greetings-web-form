@@ -135,6 +135,9 @@ li{
     border-radius: 6px;
     align-items: center;
     min-width:85px;
+    position: fixed;
+    top: 10px;
+    right: 5px;
 }
 .greeting{
     margin-top: 20px;

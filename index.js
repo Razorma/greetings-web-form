@@ -15,7 +15,7 @@ import {
   getUsers,
   addUser,
   getGreetedUsersCount,
-  removeAllUsers
+  removeAllUsers,
 } from './database.js';
 
 
@@ -49,9 +49,9 @@ async function connectToDatabase() {
 }
 async function main() {
   // Create the 'users' table
+  // await removeAllUsers()
   await createUsersTable();
   // await addUser();
-  
   await connectToDatabase();
   // await getGreetedUsersCount();
   // await removeAllUsers()
@@ -92,7 +92,8 @@ app.get('/', async function (req, res) {
       counter: greetedCount, 
       errorName: greeting.errorName(),
       errorLang: greeting.errorLang(),
-      // error
+      errorMessage:req.flash('error'),
+      infoMessage:req.flash('success')
     });
   } catch (error) {
     console.error('Error:', error.message);
@@ -104,11 +105,10 @@ app.get('/', async function (req, res) {
 app.post("/greetings", async function (req, res) {
   const letterRegex = /^[a-zA-Z ]*$/
   if(req.body.name===""||req.body.language===undefined){
-    
-    greeting.getName("")
-    greeting.setLanguageGreeting("")
-    greeting.greetName()
-    
+    req.flash('error', 'Please enter both name and language.');
+  }else  if(!letterRegex.test(req.body.name)){
+    req.flash('error', 'Please enter a valid name of only letters.');
+
   }else  if(letterRegex.test(req.body.name)){
     greeting.getName(req.body.name)
     greeting.setLanguageGreeting(req.body.language)
@@ -117,7 +117,7 @@ app.post("/greetings", async function (req, res) {
       await addUser(req.body.name);
       await getUsers();
       // await getGreetedUsersCount();
-      req.flash('success', 'User added successfully.');
+
     } catch (error) {
       console.error('Error adding user:', error.message);
     }
@@ -147,7 +147,17 @@ app.get("/counter/:name", async function (req, res) {
   }
 });
 
-
+app.post("/reset", async function (req, res) {
+  greeting.getName("")
+  greeting.setLanguageGreeting("")
+  try {
+    await removeAllUsers()
+    req.flash('success', 'Names successesfully deleted from storage.');
+  } catch (error) {
+    console.error('Error deleting users:', error.message);
+  }
+  res.redirect("/")
+});
 
   let PORT = process.env.PORT || 3012;
   
