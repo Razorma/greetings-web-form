@@ -3,7 +3,7 @@
         <ul class="listBox">
             <li class="listBoxHeader">Greeted Names</li>
             {{#each names}}
-            <li><a href="/counter/{{this.username}}">{{this.username}}</a></li>
+            <li><a href="/counter/{{this.username}}">{{capitalize this.username}}</a></li>
             {{/each}}
         </ul>
     </div>

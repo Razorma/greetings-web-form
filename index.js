@@ -76,7 +76,13 @@ app.set('views', './views');
 
 app.use(express.static('public'));
 
-
+app.engine('handlebars', engine({
+  helpers: {
+    capitalize: function(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+  }
+}));
 
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -118,7 +124,7 @@ app.post("/greetings", async function (req, res) {
     greeting.setLanguageGreeting(req.body.language)
 
     try {
-      await addUser(req.body.name);
+      await addUser((req.body.name).toLowerCase());
       await getUsers();
       // await getGreetedUsersCount();
 
