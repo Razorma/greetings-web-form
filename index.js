@@ -105,8 +105,12 @@ app.get('/', async function (req, res) {
 app.post("/greetings", async function (req, res) {
   const letterRegex = /^[a-zA-Z ]*$/
   if(req.body.name===""||req.body.language===undefined){
+    greeting.getName("")
+    greeting.setLanguageGreeting("")
     req.flash('error', 'Please enter both name and language.');
   }else  if(!letterRegex.test(req.body.name)){
+    greeting.getName("")
+    greeting.setLanguageGreeting("")
     req.flash('error', 'Please enter a valid name of only letters.');
 
   }else  if(letterRegex.test(req.body.name)){
