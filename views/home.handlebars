@@ -6,13 +6,13 @@
       <div class="heading">
         <h1>Greeting</h1>
       </div>
-      <p class="message warning center"></p>
+      <p class="messageError warning center"></p>
       <div class="name-input">
         {{#if errorMessage}}
-        <p class="message warning center">{{errorMessage}}</p>
+        <p class="message warning center alert-danger">{{errorMessage}}</p>
         {{/if}}
         {{#if infoMessage}}
-        <p class="message info center">{{infoMessage}}</p>
+        <p class="message info center alert-success">{{infoMessage}}</p>
         {{/if}}
         <form action="/greetings" method="POST">
           <div class="enter">
@@ -63,4 +63,10 @@
       </div>
     </div>
   </body>
+  <script>
+  // Automatically remove error and success messages after 2 seconds
+  setTimeout(function () {
+    $('.alert-danger, .alert-success').fadeOut('slow');
+  }, 3000);
+</script>
 </html>
