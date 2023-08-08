@@ -2,14 +2,13 @@ import express from "express";
 import { engine } from 'express-handlebars';
 import bodyParser from "body-parser";
 import greet from "./greet.js";
-import pkg from 'pg';
-const { Client } = pkg;
 import flash from 'express-flash';
 import session from 'express-session';
 
+import pgPromise from 'pg-promise';
 
-const { Pool } = pkg;
-import fs from 'fs';
+const pgp = pgPromise();
+
 import {
   createUsersTable,
   getUsers,
@@ -19,43 +18,9 @@ import {
 } from './database.js';
 
 
-const connectionString = process.env.DATABASE_URL||'postgres://bheka:OByrOSiZ7tqz1mAzx72ukmRZNAPr0Iol@dpg-cj5qva2cn0vc73flmoq0-a.oregon-postgres.render.com/razorma_r4tr';
 
-const client = new Client({
-  connectionString: connectionString,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
-
-
-client.connect()
-  .then(() => {
-    console.log('Connected to the database');
-  })
-  .catch((err) => {
-    console.error('Error connecting to the database:', err.message);
-  });
-  import { pool } from './database.js';
-
-import { db } from './database.js';
-async function connectToDatabase() {
-  try {
-    await db.connect();
-    console.log('Connected to the database');
-  } catch (error) {
-    console.error('Error connecting to the database:', error.message);
-  }
-}
 async function main() {
-  // Create the 'users' table
-  // await removeAllUsers()
   await createUsersTable();
-  // await addUser();
-  await connectToDatabase();
-  // await getGreetedUsersCount();
-  // await removeAllUsers()
-  await getUsers();
   // db.$pool.end();
 }
 
@@ -126,8 +91,6 @@ app.post("/greetings", async function (req, res) {
     try {
       await addUser((req.body.name).toLowerCase());
       await getUsers();
-      // await getGreetedUsersCount();
-
     } catch (error) {
       console.error('Error adding user:', error.message);
     }

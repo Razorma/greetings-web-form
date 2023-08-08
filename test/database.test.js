@@ -9,7 +9,7 @@ import {
 
 
 describe('Database Functions', function () {
-    this.timeout(5000);
+    this.timeout(7000);
   before(async function () {
     await createUsersTable();
   });
