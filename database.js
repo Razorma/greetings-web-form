@@ -1,6 +1,6 @@
 
 import pgPromise from 'pg-promise';
-import pg from 'pg';
+
 
 const pgp = pgPromise();
 
