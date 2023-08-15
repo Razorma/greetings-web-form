@@ -10,13 +10,6 @@ const ssl = { rejectUnauthorized: false }
 
 const db = pgp({ connectionString, ssl });
 
-const pool = new pg.Pool({
-  connectionString: connectionString,
-  ssl: {
-    rejectUnauthorized: false 
-  }
-});
-
 
 async function createUsersTable() {
   try {
@@ -127,7 +120,6 @@ export {
   addUser,
   getGreetedUsersCount,
   removeAllUsers,
-  pool
 };
 
 export { db };

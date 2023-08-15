@@ -7,7 +7,7 @@ import session from 'express-session';
 
 import pgPromise from 'pg-promise';
 
-const pgp = pgPromise();
+// const pgp = pgPromise();
 
 import {
   createUsersTable,
@@ -21,7 +21,6 @@ import {
 
 async function main() {
   await createUsersTable();
-  // db.$pool.end();
 }
 
 let app = express();
