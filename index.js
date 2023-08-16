@@ -4,25 +4,36 @@ import bodyParser from "body-parser";
 import greet from "./greet.js";
 import flash from 'express-flash';
 import session from 'express-session';
+import createUsersTable from "./tables.js"
+import pgPromise from 'pg-promise';
+import GreetingRoutes from "./routes/greetings.js"
 
+const pgp = pgPromise();
 
-import {
-  createUsersTable,
-  getUsers,
-  addUser,
-  getGreetedUsersCount,
-  removeAllUsers,
-} from './database.js';
+// Define the database connection configuration
+const connectionString = process.env.DATABASE_URL || 'postgres://bheka:OByrOSiZ7tqz1mAzx72ukmRZNAPr0Iol@dpg-cj5qva2cn0vc73flmoq0-a.oregon-postgres.render.com/razorma_r4tr';
+const ssl = { rejectUnauthorized: false }
 
+// Create a database instance using pg-promise
+const db = pgp({ connectionString, ssl });
+export {db}
+import AddAndRetrieveNames from "./database.js";
 
+// Initialize AddAndRetrieveNames with the database instance
+const addAndRetrieveNames = AddAndRetrieveNames(db)
 
+// Initialize GreetingRoutes with AddAndRetrieveNames
+const greetingRoutes = GreetingRoutes(addAndRetrieveNames)
+
+// Perform table creation on application startup
 async function main() {
-  await createUsersTable();
+  await createUsersTable(db);
 }
 
 let app = express();
 const greeting = greet()
 
+// Configure session and flash middleware
 app.use(session({ 
   secret: 'Razorma', 
   resave: false,
@@ -31,112 +42,37 @@ app.use(session({
 app.use(flash());
 
 // Setup the Handlebars view engine
-app.engine('handlebars', engine());
-app.set('view engine', 'handlebars');
-app.set('views', './views');
-
-app.use(express.static('public'));
-
 app.engine('handlebars', engine({
+  // Define a custom Handlebars helper
   helpers: {
     capitalize: function(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     }
   }
 }));
+app.set('view engine', 'handlebars');
+app.set('views', './views');
+
+app.use(express.static('public'));
 
 app.use(bodyParser.urlencoded({ extended: false }))
-
 app.use(bodyParser.json())
 
-app.get('/', async function (req, res) {
-  try {
-    const greetedCount = await getGreetedUsersCount(); 
+// Define routes using GreetingRoutes
+app.get('/', greetingRoutes.showAdd);
+app.post("/greetings", greetingRoutes.add);
+app.get("/greeted", greetingRoutes.get);
+app.get("/counter/:name", greetingRoutes.getFor);
+app.post("/reset", greetingRoutes.reset);
 
-    res.render('home', {
-      name: greeting.greetName(),
-      language: greeting.getLanguageGreeting(),
-      counter: greetedCount, 
-      errorName: greeting.errorName(),
-      errorLang: greeting.errorLang(),
-      errorMessage:req.flash('error'),
-      infoMessage:req.flash('success')
-    });
-  } catch (error) {
-    console.error('Error:', error.message);
-    res.status(500).send('Internal Server Error');
-  }
+let PORT = process.env.PORT || 3012;
+
+// Start the server
+app.listen(PORT, function(){
+  console.log('App starting on port', PORT);
 });
 
-
-app.post("/greetings", async function (req, res) {
-  const letterRegex = /^[a-zA-Z ]*$/
-  if(req.body.name===""||req.body.language===undefined){
-    greeting.getName("")
-    greeting.setLanguageGreeting("")
-    req.flash('error', 'Please enter both name and language.');
-  }else  if(!letterRegex.test(req.body.name)){
-    greeting.getName("")
-    greeting.setLanguageGreeting("")
-    req.flash('error', 'Please enter a valid name of only letters.');
-
-  }else  if(letterRegex.test(req.body.name)){
-    greeting.getName(req.body.name)
-    greeting.setLanguageGreeting(req.body.language)
-
-    try {
-      await addUser((req.body.name).toLowerCase());
-      await getUsers();
-    } catch (error) {
-      console.error('Error adding user:', error.message);
-    }
-
-  } 
-    res.redirect("/")
-});
-app.get("/greeted", async function (req, res) {
-  try {
-    const names = await getUsers(); 
-
-    res.render('greeted', { names }); 
-  } catch (error) {
-    console.error('Error getting users:', error.message);
-    res.status(500).send('Internal Server Error');
-  }
-});
-app.get("/counter/:name", async function (req, res) {
-  const requestedName = req.params.name;
-  try {
-    const nameArray = await getUsers();
-    const matchingUsers = nameArray.filter(user => user.username === requestedName);
-    res.render('counter', { names: matchingUsers });
-  } catch (error) {
-    console.error('Error getting users:', error.message);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-app.post("/reset", async function (req, res) {
-  greeting.getName("")
-  greeting.setLanguageGreeting("")
-  try {
-    await removeAllUsers()
-    req.flash('success', 'Names successesfully deleted from storage.');
-  } catch (error) {
-    console.error('Error deleting users:', error.message);
-  }
-  res.redirect("/")
-});
-
-  let PORT = process.env.PORT || 3012;
-  
-  app.listen(PORT, function(){
-    console.log('App starting on port', PORT);
-  });
-
-
-
-
+// Run the main function to create tables
 main().catch((error) => {
   console.error('An error occurred:', error);
 });

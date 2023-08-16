@@ -1,28 +1,24 @@
 import assert from 'assert';
-import {
-  createUsersTable,
-  addUser,
-  getUsers,
-  getGreetedUsersCount,
-  removeAllUsers
-} from '../database.js';
-
-
+import {db} from "../index.js"
+import AddAndRetrieveNames from "../database.js";
+import createUsersTable from "../tables.js"
+const addAndRetrieveNames = AddAndRetrieveNames(db)
+ 
 describe('Database Functions', function () {
     this.timeout(7000);
   before(async function () {
-    await createUsersTable();
+    await createUsersTable(db);
   });
 
   afterEach(async function () {
-    await removeAllUsers();
+    await addAndRetrieveNames.removeAllUsers();
   });
 
   it('should add and retrieve users', async function () {
-    await addUser('User1');
-    await addUser('User2');
+    await addAndRetrieveNames.addUser('User1');
+    await addAndRetrieveNames.addUser('User2');
             
-    const users = await getUsers();
+    const users = await addAndRetrieveNames.getUsers();
 
     assert.equal(users.length, 2);
     assert.equal(users[0].username, 'User1');
@@ -31,20 +27,20 @@ describe('Database Functions', function () {
   });
 
   it('should count greeted users', async function () {
-    await addUser('User1');
-    await addUser('User2');
+    await addAndRetrieveNames.addUser('User1');
+    await addAndRetrieveNames.addUser('User2');
 
-    const greetedCount = await getGreetedUsersCount();
+    const greetedCount = await addAndRetrieveNames.getGreetedUsersCount();
     assert.strictEqual(parseFloat(greetedCount), 2);
   });
 
   it('should remove all users', async function () {
-    await addUser('User1');
-    await addUser('User2');
+    await addAndRetrieveNames.addUser('User1');
+    await addAndRetrieveNames.addUser('User2');
 
-    await removeAllUsers();
+    await addAndRetrieveNames.removeAllUsers();
 
-    const users = await getUsers();
+    const users = await addAndRetrieveNames.getUsers();
     assert.strictEqual(users.length, 0);
   });
 });
